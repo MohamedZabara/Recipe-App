@@ -1,0 +1,28 @@
+PODS:
+  - Alamofire (5.4.4)
+  - KRActivityIndicatorView (3.0.7)
+  - KRProgressHUD (3.4.7):
+    - KRActivityIndicatorView (= 3.0.7)
+  - SearchTextField (1.2.4)
+
+DEPENDENCIES:
+  - Alamofire
+  - KRProgressHUD
+  - SearchTextField
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - KRActivityIndicatorView
+    - KRProgressHUD
+    - SearchTextField
+
+SPEC CHECKSUMS:
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  KRActivityIndicatorView: ad69e89c4ce40c986cf580595be4829dcad0e35a
+  KRProgressHUD: a248f0bc6c9c2aed40a37b76e03ffecc7f85c887
+  SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
+
+PODFILE CHECKSUM: 692e8a05d15ec03c52c6a3ba87df2b65c7578fc3
+
+COCOAPODS: 1.11.2
