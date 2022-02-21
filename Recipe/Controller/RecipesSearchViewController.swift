@@ -7,18 +7,38 @@
 
 import UIKit
 import KRProgressHUD
+import SearchTextField
 
 class RecipesSearchViewController: UIViewController {
-    @IBOutlet weak var recipeTextField: UITextField!
+    @IBOutlet weak var recipeTextField: SearchTextField!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     var allRecipes = [[String:Recipe]]()
     let recipeApi = RecipeApi()
+
+    var searchListArray = ["a","b"]
+    
+    
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 //        print("here in viewdidload")
+
+        searchListArray.append("we")
+        searchListArray.reverse()
+        print(searchListArray)
+        recipeTextField.filterStrings(searchListArray)
+    
+        
+      
+   customizeTextField()
+
+       
+
        
 
         
@@ -46,9 +66,7 @@ class RecipesSearchViewController: UIViewController {
                 }
                 self.allRecipes.append(contentsOf: recipes)
 //                print(self.allRecipes)
-                DispatchQueue.main.async {
                     self.reloadTableView()
-                }
                 
                 
             }
@@ -58,10 +76,20 @@ class RecipesSearchViewController: UIViewController {
     }
     
     func reloadTableView(){
+        DispatchQueue.main.async {
         self.tableView.reloadData()
+        }
     }
-
-
+    
+    func customizeTextField(){
+        recipeTextField.theme.font = UIFont.systemFont(ofSize: 14)
+        recipeTextField.theme.bgColor = UIColor.lightGray
+        recipeTextField.theme.separatorColor = UIColor.black
+        recipeTextField.theme.cellHeight = 40
+        recipeTextField.maxNumberOfResults = 10
+        recipeTextField.startSuggestingImmediately = true
+        recipeTextField.startVisible = true
+    }
 }
 
 extension RecipesSearchViewController:UICollectionViewDataSource{
@@ -141,6 +169,10 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: Constamt.detailSegue, sender: allRecipes[indexPath.row][Constamt.recipeDicKey])
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
     }
     
     

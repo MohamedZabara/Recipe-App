@@ -18,16 +18,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Search.." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GMo-7u-RzR">
-                                <rect key="frame" x="12" y="100" width="390" height="35"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lx9-aE-rle" userLabel="backTextFieldView">
+                                <rect key="frame" x="12" y="90" width="390" height="35"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Search.." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GMo-7u-RzR" customClass="SearchTextField" customModule="SearchTextField">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="JWN-qX-EMi"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="ASCIICapableNumberPad" returnKeyType="search"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="JWN-qX-EMi"/>
+                                    <constraint firstAttribute="trailing" secondItem="GMo-7u-RzR" secondAttribute="trailing" id="FR4-bm-C07"/>
+                                    <constraint firstItem="GMo-7u-RzR" firstAttribute="leading" secondItem="lx9-aE-rle" secondAttribute="leading" id="I35-ed-aSp"/>
+                                    <constraint firstItem="GMo-7u-RzR" firstAttribute="top" secondItem="lx9-aE-rle" secondAttribute="top" id="SHc-G9-U71"/>
+                                    <constraint firstAttribute="bottom" secondItem="GMo-7u-RzR" secondAttribute="bottom" id="hjP-1v-eis"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="ASCIICapableNumberPad" returnKeyType="search"/>
-                            </textField>
+                            </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="E2G-Vj-fuc">
-                                <rect key="frame" x="0.0" y="147" width="414" height="70"/>
+                                <rect key="frame" x="0.0" y="127" width="414" height="70"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="6i3-mA-d3S"/>
@@ -50,7 +62,7 @@
                                 </cells>
                             </collectionView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="C26-Ib-mA9">
-                                <rect key="frame" x="12" y="225" width="390" height="671"/>
+                                <rect key="frame" x="12" y="205" width="390" height="691"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -60,11 +72,11 @@
                             <constraint firstItem="C26-Ib-mA9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="1uX-Wk-yL3"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="C26-Ib-mA9" secondAttribute="trailing" constant="12" id="4zB-DG-GQi"/>
                             <constraint firstItem="E2G-Vj-fuc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="5iL-7q-0tf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GMo-7u-RzR" secondAttribute="trailing" constant="12" id="8yD-h7-215"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="E2G-Vj-fuc" secondAttribute="trailing" id="CuJ-p1-Ljj"/>
-                            <constraint firstItem="E2G-Vj-fuc" firstAttribute="top" secondItem="GMo-7u-RzR" secondAttribute="bottom" constant="12" id="Egl-93-aqf"/>
-                            <constraint firstItem="GMo-7u-RzR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="aFf-9G-D9w"/>
-                            <constraint firstItem="GMo-7u-RzR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="12" id="f0P-hT-Wik"/>
+                            <constraint firstItem="E2G-Vj-fuc" firstAttribute="top" secondItem="lx9-aE-rle" secondAttribute="bottom" constant="2" id="D79-ES-f1a"/>
+                            <constraint firstItem="lx9-aE-rle" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="2" id="E83-v5-9WH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lx9-aE-rle" secondAttribute="trailing" constant="12" id="MuZ-jb-i0C"/>
+                            <constraint firstItem="lx9-aE-rle" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="ZOa-Qw-hpQ"/>
                             <constraint firstItem="C26-Ib-mA9" firstAttribute="top" secondItem="E2G-Vj-fuc" secondAttribute="bottom" constant="8" id="kFj-dm-ECj"/>
                             <constraint firstAttribute="bottom" secondItem="C26-Ib-mA9" secondAttribute="bottom" id="tfb-GN-CJy"/>
                         </constraints>
