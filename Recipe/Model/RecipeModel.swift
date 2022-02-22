@@ -6,5 +6,10 @@
 //
 
 class RecipeModel{
+    enum OperationChosen{
+        case searching
+        case filtering
+        case pagination
+    }
     
 }

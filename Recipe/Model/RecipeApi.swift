@@ -4,9 +4,30 @@ import Foundation
 
 class RecipeApi{
         
-    func fetchData(search q:String?,filter health:String?,from:Int?,completion:@escaping(Hits?,Bool)->Void){
-        let endPoint = Constamt.startUrlPoint+"&q=\(q ?? "random")&from=\(from!)"
+    func fetchData(search q:String?,filter health:String?,from:Int?,operation:RecipeModel.OperationChosen,completion:@escaping(Hits?,Bool)->Void){
+        var endPoint = Constamt.startUrlPoint+"&q=\(q ?? "random")&from=\(from!)"
 
+       
+        
+        switch operation {
+        case .searching:
+            KRProgressHUD.show(withMessage: "Loading...")
+            break
+        case .filtering:
+            KRProgressHUD.show(withMessage: "Loading...")
+            guard let health = health else{
+                return
+            }
+            endPoint = endPoint + "&health=\(health)"
+        case .pagination:
+            if let health = health{
+                endPoint = endPoint + "&health=\(health)"
+            }
+
+        }
+        
+        
+        
         let request = AF.request(endPoint)
         
         request.responseJSON { (response) in
@@ -17,6 +38,7 @@ class RecipeApi{
           
                 
                 let hitsResult = self.parseJson(data: data)
+                KRProgressHUD.dismiss()
                 if let hitsResult = hitsResult {
                     completion(hitsResult,false)
 
@@ -26,6 +48,8 @@ class RecipeApi{
              
                 
             case .failure(let error):
+                KRProgressHUD.dismiss()
+                completion(nil,true)
                 print(error)
                 break
                 // error handling

@@ -18,6 +18,7 @@ class RecipesSearchViewController: UIViewController {
     var isMore:Bool?
     var from:Int?
     var search:String?
+    var health:String? = nil
 
     var searchListArray = ["a","b"]
     
@@ -36,16 +37,16 @@ class RecipesSearchViewController: UIViewController {
         searchListArray.reverse()
         print(searchListArray)
         recipeTextField.filterStrings(searchListArray)
-        KRProgressHUD.show(withMessage: "Loading...")
 
 
-        callSearchApi()
+        callSearchApi(operation: .searching)
 
     customizeTextField()
 
         categoryCollectionView.dataSource = self
         tableView.delegate = self
         tableView.dataSource = self
+        recipeTextField.delegate = self
         
         
         
@@ -61,11 +62,13 @@ class RecipesSearchViewController: UIViewController {
         tableView.register(tableCellNib.self, forCellReuseIdentifier: Constamt.tableCellId)
     }
     
+    
     func reloadTableView(){
         DispatchQueue.main.async {
         self.tableView.reloadData()
         }
     }
+    
     
     func createSpinnerFooter()->UIView{
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 100))
@@ -87,9 +90,16 @@ class RecipesSearchViewController: UIViewController {
         recipeTextField.startVisible = true
     }
     
-    func callSearchApi(search:String? = "random",health:String? = nil,from:Int? = 0){
-        recipeApi.fetchData(search: search, filter: health, from: from) { response, error in
+    func showErrorHud(){
+        KRProgressHUD.showError(withMessage: "No results found ")
+    }
+    
+    func callSearchApi(search:String? = "random",health:String? = nil,from:Int? = 0,operation:RecipeModel.OperationChosen){
+        
+        
+        recipeApi.fetchData(search: search, filter: health, from: from,operation: operation) { response, error in
 //            print("in  closure")
+            print("ooooooooo \(operation)")
             if !error{
                 guard let hits = response else{
 //                    print("cant 1")
@@ -100,14 +110,36 @@ class RecipesSearchViewController: UIViewController {
 //                    print("cant 2")
                     return
                 }
+                let e:String? = "search"
+                print(e == "search" ? "tttttttt":"ffffffffff")
+                
+                switch operation {
+                case .searching:
+                    if recipes.isEmpty{
+                        self.showErrorHud()
+                    }else{
+                        self.allRecipes.removeAll()
+                    }
+                
+                case .filtering:
+                    break
+                case .pagination:
+                    break
+                }
+                
+            
                 self.allRecipes.append(contentsOf: recipes)
                 self.isMore = hits.more
                 self.from = (hits.to ?? 0) + 1
+                print("aaaaaa\(self.search)")
                 self.search = hits.q
-//                print(self.allRecipes)
+                print("aaaaaa\(search)")
+                print(self.allRecipes)
                     self.reloadTableView()
                 
                 
+            }else{
+                self.showErrorHud()
             }
            
         }
@@ -201,7 +233,7 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
             }
             if isMore{
                 tableView.tableFooterView = createSpinnerFooter()
-                callSearchApi(search: search, from: from)
+                callSearchApi(search: search, from: from,operation: .pagination)
             }
             
         }
@@ -239,4 +271,41 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
    
     
     
+}
+
+extension RecipesSearchViewController:UITextFieldDelegate{
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        if range.location == 0 && string == " " { // prevent space on first character
+            return false
+        }
+
+        if textField.text?.last == " " && string == " " { // allowed only single space
+            return false
+        }
+
+        if string == " " { return true } // now allowing space between name
+
+        if string.rangeOfCharacter(from: CharacterSet.letters.inverted) != nil {
+            return false
+        }
+
+        return true
+    }
+    
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print(textField.text)
+        
+        guard let searchText = textField.text else{
+            return false
+        }
+        if !searchText.isEmpty{
+            callSearchApi(search: searchText, health: health, from: 0,operation: .searching)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
 }
