@@ -1,11 +1,13 @@
-
+import KRProgressHUD
 import Alamofire
 import Foundation
 
 class RecipeApi{
         
-    func fetchData(search q:String = "All",filter health:String?,completion:@escaping(Hits?,Bool)->Void){
-        let request = AF.request("https://api.edamam.com/search?q=chicken&app_id=9a736ed0&app_key=676d133db1fa8609950d571bf7eaed01&from=0")
+    func fetchData(search q:String?,filter health:String?,from:Int?,completion:@escaping(Hits?,Bool)->Void){
+        let endPoint = Constamt.startUrlPoint+"&q=\(q ?? "random")&from=\(from!)"
+
+        let request = AF.request(endPoint)
         
         request.responseJSON { (response) in
             switch response.result {

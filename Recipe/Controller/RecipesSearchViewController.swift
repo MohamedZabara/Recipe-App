@@ -15,6 +15,9 @@ class RecipesSearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var allRecipes = [[String:Recipe]]()
     let recipeApi = RecipeApi()
+    var isMore:Bool?
+    var from:Int?
+    var search:String?
 
     var searchListArray = ["a","b"]
     
@@ -27,32 +30,65 @@ class RecipesSearchViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 //        print("here in viewdidload")
+        registerCell()
 
         searchListArray.append("we")
         searchListArray.reverse()
         print(searchListArray)
         recipeTextField.filterStrings(searchListArray)
-    
-        
-      
-   customizeTextField()
+        KRProgressHUD.show(withMessage: "Loading...")
 
-       
 
-       
+        callSearchApi()
 
-        
+    customizeTextField()
+
         categoryCollectionView.dataSource = self
-        let cellNib = UINib(nibName: "\(Constamt.collectionNibName.self)", bundle: nil)
-        categoryCollectionView.register(cellNib.self, forCellWithReuseIdentifier: Constamt.collectionCellIdId)
         tableView.delegate = self
         tableView.dataSource = self
         
+        
+        
+        
+     
+
+    }
+    
+    func registerCell(){
+        let cellNib = UINib(nibName: "\(Constamt.collectionNibName.self)", bundle: nil)
+        categoryCollectionView.register(cellNib.self, forCellWithReuseIdentifier: Constamt.collectionCellIdId)
         let tableCellNib = UINib(nibName: "\(Constamt.tableNibName.self)", bundle: nil)
         tableView.register(tableCellNib.self, forCellReuseIdentifier: Constamt.tableCellId)
-        
-        
-        recipeApi.fetchData(filter: nil) { response, error in
+    }
+    
+    func reloadTableView(){
+        DispatchQueue.main.async {
+        self.tableView.reloadData()
+        }
+    }
+    
+    func createSpinnerFooter()->UIView{
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 100))
+//        footerView.backgroundColor = UIColor.lightGray
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        return footerView
+    }
+    
+    func customizeTextField(){
+        recipeTextField.theme.font = UIFont.systemFont(ofSize: 14)
+        recipeTextField.theme.bgColor = UIColor.lightGray
+        recipeTextField.theme.separatorColor = UIColor.black
+        recipeTextField.theme.cellHeight = 40
+        recipeTextField.maxNumberOfResults = 10
+        recipeTextField.startSuggestingImmediately = true
+        recipeTextField.startVisible = true
+    }
+    
+    func callSearchApi(search:String? = "random",health:String? = nil,from:Int? = 0){
+        recipeApi.fetchData(search: search, filter: health, from: from) { response, error in
 //            print("in  closure")
             if !error{
                 guard let hits = response else{
@@ -65,6 +101,9 @@ class RecipesSearchViewController: UIViewController {
                     return
                 }
                 self.allRecipes.append(contentsOf: recipes)
+                self.isMore = hits.more
+                self.from = (hits.to ?? 0) + 1
+                self.search = hits.q
 //                print(self.allRecipes)
                     self.reloadTableView()
                 
@@ -72,23 +111,7 @@ class RecipesSearchViewController: UIViewController {
             }
            
         }
-
-    }
-    
-    func reloadTableView(){
-        DispatchQueue.main.async {
-        self.tableView.reloadData()
-        }
-    }
-    
-    func customizeTextField(){
-        recipeTextField.theme.font = UIFont.systemFont(ofSize: 14)
-        recipeTextField.theme.bgColor = UIColor.lightGray
-        recipeTextField.theme.separatorColor = UIColor.black
-        recipeTextField.theme.cellHeight = 40
-        recipeTextField.maxNumberOfResults = 10
-        recipeTextField.startSuggestingImmediately = true
-        recipeTextField.startVisible = true
+        
     }
 }
 
@@ -172,8 +195,21 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+        if indexPath.row == allRecipes.count-1{
+            guard let isMore = isMore else{
+                return
+            }
+            if isMore{
+                tableView.tableFooterView = createSpinnerFooter()
+                callSearchApi(search: search, from: from)
+            }
+            
+        }
     }
+    
+    
+
+  
     
     
     

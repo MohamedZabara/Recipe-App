@@ -21,13 +21,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lx9-aE-rle" userLabel="backTextFieldView">
                                 <rect key="frame" x="12" y="90" width="390" height="35"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Search.." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GMo-7u-RzR" customClass="SearchTextField" customModule="SearchTextField">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="   Search.." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GMo-7u-RzR" customClass="SearchTextField" customModule="SearchTextField">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="JWN-qX-EMi"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="ASCIICapableNumberPad" returnKeyType="search"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="alphabet" returnKeyType="search" textContentType="name"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
