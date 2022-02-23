@@ -52,7 +52,6 @@ class RecipeApi{
                 completion(nil,true)
                 print(error)
                 break
-                // error handling
             }
         }
         
@@ -78,7 +77,28 @@ class RecipeApi{
         }
     }
     
-    func loadImageUrl(imgUrl:URL){
-       // let request = AF.request(imgUrl)
+    func loadImageUrl(imgUrlString:String?,completion:@escaping(Data)->Void){
+        
+        guard let imgUrlString = imgUrlString else {
+            return
+        }
+        AF.request( imgUrlString,method: .get).response{ response in
+
+           switch response.result {
+            case .success(let responseData):
+               guard let data = responseData else {return}
+               print("eeeeeeeeeeeeee")
+               completion(data)
+
+
+            case .failure(let error):
+               KRProgressHUD.showError(withMessage: "No results found")
+               print("llllllllllll\(error)")
+               break
+            }
+        }
+        
+        
+        
     }
 }

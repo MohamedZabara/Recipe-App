@@ -27,8 +27,10 @@ class DetailsViewController: UIViewController {
     }
     func setUpUI(){
         if let img = recipe?.image{
-            if let data = getImgData(imgUrl:img){
-            recipeImg.image = UIImage(data:data)
+            RecipeApi().loadImageUrl(imgUrlString: img) { data in
+                DispatchQueue.main.async {
+                    self.recipeImg.image = UIImage(data: data, scale: 1)
+                }
             }
         }
         
@@ -56,14 +58,7 @@ class DetailsViewController: UIViewController {
        self.present(activityViewController, animated: true, completion: nil)
     }
     
-    func getImgData(imgUrl img:String)->Data?{
-        let url = URL(string: img)
-        if let url = url{
-            let data = try? Data(contentsOf: url)
-            return data
-        }
-        return nil
-    }
+   
     
     func openSafari(open url:String){
         if let url = URL(string: url) {

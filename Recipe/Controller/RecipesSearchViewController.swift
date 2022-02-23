@@ -20,7 +20,7 @@ class RecipesSearchViewController: UIViewController {
     var from:Int?
     var search:String?
     var health:String? = nil
-
+    
     var searchListArray = [String](){
         didSet{
             recipeTextField.filterStrings(searchListArray.reversed())
@@ -28,54 +28,31 @@ class RecipesSearchViewController: UIViewController {
     }
     
     
-   
+    
     
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerCell()
-        setUpSearchList()
-     
-        
-   
-        
-        
-        
-
-//        searchListArray.append("we")
-//        searchListArray.reverse()
-        print(searchListArray)
-        recipeTextField.filterStrings(searchListArray)
-
-
-        callSearchApi(operation: .searching)
-
-    customizeTextField()
-
         categoryCollectionView.dataSource = self
         categoryCollectionView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         recipeTextField.delegate = self
+        registerCell()
+        setUpSearchList()
+        customizeTextField()
+        observeAppInBackGround()
+        callSearchApi(operation: .searching)
         
-        
-        
-        
-     
-
     }
-   
+    
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         recipeModel.persistSearchList(list: searchListArray)
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIScene.willDeactivateNotification, object: nil)
-        } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-        }
+        
     }
     
     func registerCell(){
@@ -88,7 +65,7 @@ class RecipesSearchViewController: UIViewController {
     
     func reloadTableView(){
         DispatchQueue.main.async {
-        self.tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
@@ -115,6 +92,7 @@ class RecipesSearchViewController: UIViewController {
     func setUpSearchList(){
         recipeModel.getSearchList{
             self.searchListArray = $0
+            self.recipeTextField.filterStrings(self.searchListArray.reversed())
         }
     }
     
@@ -130,11 +108,11 @@ class RecipesSearchViewController: UIViewController {
         recipeModel.persistSearchList(list: searchListArray)
     }
     
-   
+    
     
     func showErrorHud(){
-            self.allRecipes.removeAll()
-            KRProgressHUD.showError(withMessage: "No results found")
+        self.allRecipes.removeAll()
+        KRProgressHUD.showError(withMessage: "No results found")
         tableView.tableFooterView = nil
     }
     
@@ -142,20 +120,20 @@ class RecipesSearchViewController: UIViewController {
         
         
         recipeApi.fetchData(search: search, filter: health, from: from,operation: operation) { response, error in
-//            print("in  closure")
+            //            print("in  closure")
             print("ooooooooo \(operation)")
             if !error{
                 guard let hits = response else{
-//                    print("cant 1")
+                    //                    print("cant 1")
                     return
                 }
                 
                 guard let recipes = hits.hits else{
-//                    print("cant 2")
+                    //                    print("cant 2")
                     return
                 }
-            
-
+                
+                
                 switch operation {
                 case .searching:
                     if recipes.isEmpty{
@@ -165,7 +143,7 @@ class RecipesSearchViewController: UIViewController {
                         self.allRecipes.removeAll()
                     }
                     
-                
+                    
                 case .filtering:
                     if recipes.isEmpty{
                         self.showErrorHud()
@@ -180,10 +158,10 @@ class RecipesSearchViewController: UIViewController {
                 
                 let o:RecipeModel.OperationChosen = .searching
                 print("kkkkkkkkk\(o)")
-            
+                
                 self.allRecipes.append(contentsOf: recipes)
                 print("uuuuuuu\(self.allRecipes.count)")
-
+                
                 self.isMore = hits.more
                 self.from = (hits.to ?? 0) + 1
                 print("pppppp\(hits.to)")
@@ -191,13 +169,13 @@ class RecipesSearchViewController: UIViewController {
                 self.search = hits.q
                 print("aaaaaa\(search)")
                 print(self.allRecipes)
-                    self.reloadTableView()
+                self.reloadTableView()
                 
                 
             }else{
                 self.showErrorHud()
             }
-           
+            
         }
         
     }
@@ -212,12 +190,12 @@ extension RecipesSearchViewController:UICollectionViewDataSource,UICollectionVie
         let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: Constant.collectionCellIdId, for: indexPath) as! categoryCollectionViewCell
         cell.categoryName.sizeToFit()
         cell.categoryName.text =  Constant.Filteration[indexPath.row].replacingOccurrences(of: "-", with: " ")
-      
+        
         return cell
-
+        
     }
     
- 
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: Constant.Filteration[indexPath.item].size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]).width + 50, height: 65)
     }
@@ -231,7 +209,7 @@ extension RecipesSearchViewController:UICollectionViewDataSource,UICollectionVie
         }else{
             health = Constant.Filteration[indexPath.row]
             print("vvvvvvv search\(search)  filter\(Constant.Filteration[indexPath.row])")
-
+            
             callSearchApi(search: search, health: health, from: 0, operation: .filtering)
         }
         
@@ -248,21 +226,22 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.tableCellId, for: indexPath) as! RecipeTableViewCell
         let recipe = allRecipes[indexPath.row]["recipe"]
-//        print("title :\(recipe?.label)")
+        //        print("title :\(recipe?.label)")
         
         cell.titleLabel.text = recipe!.label
-//        print("source :\(recipe?.source)")
+        //        print("source :\(recipe?.source)")
         cell.sourceLabel.text = recipe!.source
-//        if let img = recipe?.image{
-//            if let data = getImgData(imgUrl:img){
-//            cell.recipeImage.image = UIImage(data:data)
-//            }
-//        }
-//        print("health :\((recipe?.healthLabels))")
+        
+        recipeApi.loadImageUrl(imgUrlString: recipe?.image) { data in
+            DispatchQueue.main.async {
+                cell.recipeImage.image = UIImage(data: data, scale:1)
+            }
+        }
 
+        
         var h = ""
         if let healthLabels = recipe?.healthLabels{
-
+            
             for health in healthLabels{
                 if indexPath.row == 0{
                     cell.healthLabel.text = """
@@ -271,35 +250,35 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
                 mo
                 """
                 }else{
-                cell.healthLabel.text = h + ",\(health)"
-//                print(health, separator: ",", terminator: " ")
+                    cell.healthLabel.text = h + ",\(health)"
+                    //                print(health, separator: ",", terminator: " ")
                 }
             }
             h=""
         }
-//        cell.healthLabel.numberOfLines = 2
+        //        cell.healthLabel.numberOfLines = 2
         
-
         
-//        cell.healthLabel.text = """
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        hi
-//        """
-                return cell
+        
+        //        cell.healthLabel.text = """
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        hi
+        //        """
+        return cell
     }
     
-   
-//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 250
-//    }
+    
+    //    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    //        return 250
+    //    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: Constant.detailSegue, sender: allRecipes[indexPath.row][Constant.recipeDicKey])
     }
@@ -321,8 +300,8 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     
-
-  
+    
+    
     
     
     
@@ -341,15 +320,15 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == Constant.detailSegue {
-              if let nextViewController = segue.destination as? DetailsViewController {
-                  nextViewController.recipe = sender as? Recipe
-                      
-              }
-          }
+            if let nextViewController = segue.destination as? DetailsViewController {
+                nextViewController.recipe = sender as? Recipe
+                
+            }
+        }
         
     }
     
-   
+    
     
     
 }
@@ -357,21 +336,21 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
 extension RecipesSearchViewController:UITextFieldDelegate{
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
+        
         if range.location == 0 && string == " " { // prevent space on first character
             return false
         }
-
+        
         if textField.text?.last == " " && string == " " { // allowed only single space
             return false
         }
-
+        
         if string == " " { return true } // now allowing space between name
-
+        
         if string.rangeOfCharacter(from: CharacterSet.letters.inverted) != nil {
             return false
         }
-
+        
         return true
     }
     
