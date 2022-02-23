@@ -122,6 +122,7 @@ class RecipesSearchViewController: UIViewController {
     func showErrorHud(){
         self.allRecipes.removeAll()
         KRProgressHUD.showError(withMessage: "No results found")
+        reloadTableView()
         tableView.tableFooterView = nil
     }
     
@@ -133,12 +134,11 @@ class RecipesSearchViewController: UIViewController {
             print("ooooooooo \(operation)")
             if !error{
                 guard let hits = response else{
-                    //                    print("cant 1")
+                    
                     return
                 }
                 
                 guard let recipes = hits.hits else{
-                    //                    print("cant 2")
                     return
                 }
                 

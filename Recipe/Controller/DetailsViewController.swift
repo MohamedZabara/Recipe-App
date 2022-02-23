@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 
 class DetailsViewController: UIViewController {
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var recipeImg: UIImageView!
     @IBOutlet weak var ingredientTableView: UITableView!
     var recipe:Recipe?
@@ -33,6 +34,8 @@ class DetailsViewController: UIViewController {
                 }
             }
         }
+        
+        titleLabel.text = recipe?.label
         
     }
     

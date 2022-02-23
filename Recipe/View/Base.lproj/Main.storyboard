@@ -201,7 +201,7 @@
                                 </constraints>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vAz-qB-pUu">
-                                <rect key="frame" x="0.0" y="292" width="414" height="498"/>
+                                <rect key="frame" x="0.0" y="338" width="414" height="452"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="QcL-BM-FcD">
@@ -223,19 +223,28 @@
                                     <action selector="recipeWebsiteBtnClicked:" destination="QYl-U0-oQl" eventType="touchUpInside" id="6ha-jX-4qp"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rD-H9-Q9K">
+                                <rect key="frame" x="10" y="305" width="400" height="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QWM-gy-DNE"/>
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
+                            <constraint firstItem="QWM-gy-DNE" firstAttribute="trailing" secondItem="4rD-H9-Q9K" secondAttribute="trailing" constant="4" id="0tZ-3t-Kp4"/>
                             <constraint firstItem="QWM-gy-DNE" firstAttribute="bottom" secondItem="CJf-Bd-ffa" secondAttribute="bottom" constant="30" id="2tP-Xa-OGK"/>
+                            <constraint firstItem="vAz-qB-pUu" firstAttribute="top" secondItem="4rD-H9-Q9K" secondAttribute="bottom" constant="15" id="6tT-UU-Ezf"/>
                             <constraint firstItem="CJf-Bd-ffa" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" constant="20" id="Enz-07-B5V"/>
                             <constraint firstItem="QWM-gy-DNE" firstAttribute="trailing" secondItem="CJf-Bd-ffa" secondAttribute="trailing" constant="20" id="FdT-B5-xb0"/>
                             <constraint firstItem="vAz-qB-pUu" firstAttribute="trailing" secondItem="QWM-gy-DNE" secondAttribute="trailing" id="I0y-x0-p6N"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="top" secondItem="QWM-gy-DNE" secondAttribute="top" id="Ngl-gk-IwM"/>
                             <constraint firstItem="vAz-qB-pUu" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" id="Q5o-Zs-5Kp"/>
-                            <constraint firstItem="vAz-qB-pUu" firstAttribute="top" secondItem="SDl-YH-97K" secondAttribute="bottom" constant="2" id="fZY-vv-a2i"/>
+                            <constraint firstItem="4rD-H9-Q9K" firstAttribute="top" secondItem="SDl-YH-97K" secondAttribute="bottom" constant="15" id="UjA-DW-wIe"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" id="iK7-RK-mbR"/>
                             <constraint firstItem="CJf-Bd-ffa" firstAttribute="top" secondItem="vAz-qB-pUu" secondAttribute="bottom" constant="12" id="mSJ-7F-BmG"/>
+                            <constraint firstItem="4rD-H9-Q9K" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" constant="10" id="ogR-Ud-ANj"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="trailing" secondItem="QWM-gy-DNE" secondAttribute="trailing" id="x8p-P6-eIT"/>
                         </constraints>
                     </view>
@@ -249,6 +258,7 @@
                     <connections>
                         <outlet property="ingredientTableView" destination="vAz-qB-pUu" id="5Ua-gc-Ws5"/>
                         <outlet property="recipeImg" destination="SDl-YH-97K" id="dDm-xZ-l1i"/>
+                        <outlet property="titleLabel" destination="4rD-H9-Q9K" id="mKU-o9-bWj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TPC-yu-FMa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
