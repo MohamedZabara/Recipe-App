@@ -45,15 +45,24 @@ class RecipesSearchViewController: UIViewController {
         customizeTextField()
         observeAppInBackGround()
         callSearchApi(operation: .searching)
-        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSearchList))
+        navigationController?.navigationBar.addGestureRecognizer(tap)
+
+
+//        hideKeyboardWhenTappedAround()
     }
-    
-    
+                                         
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         recipeModel.persistSearchList(list: searchListArray)
         
     }
+    @objc func dismissSearchList(){
+        recipeTextField.hideResultsList()
+        recipeTextField.resignFirstResponder()
+
+}
+
     
     func registerCell(){
         let cellNib = UINib(nibName: "\(Constant.collectionNibName.self)", bundle: nil)
@@ -164,11 +173,7 @@ class RecipesSearchViewController: UIViewController {
                 
                 self.isMore = hits.more
                 self.from = (hits.to ?? 0) + 1
-                print("pppppp\(hits.to)")
-                print("aaaaaa\(self.search)")
                 self.search = hits.q
-                print("aaaaaa\(search)")
-                print(self.allRecipes)
                 self.reloadTableView()
                 
                 
@@ -204,11 +209,9 @@ extension RecipesSearchViewController:UICollectionViewDataSource,UICollectionVie
         print(Constant.Filteration[indexPath.row])
         if indexPath.row == 0{
             health = nil
-            print("vvvvvvv search\(search)")
             callSearchApi(search: search, operation: .searching)
         }else{
             health = Constant.Filteration[indexPath.row]
-            print("vvvvvvv search\(search)  filter\(Constant.Filteration[indexPath.row])")
             
             callSearchApi(search: search, health: health, from: 0, operation: .filtering)
         }
@@ -227,58 +230,35 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.tableCellId, for: indexPath) as! RecipeTableViewCell
         let recipe = allRecipes[indexPath.row]["recipe"]
         //        print("title :\(recipe?.label)")
+        cell.titleLabel.sizeToFit()
+        cell.titleLabel.adjustsFontSizeToFitWidth = true
         
         cell.titleLabel.text = recipe!.label
         //        print("source :\(recipe?.source)")
-        cell.sourceLabel.text = recipe!.source
+        cell.sourceLabel.text = "Source: \(recipe!.source)"
         
         recipeApi.loadImageUrl(imgUrlString: recipe?.image) { data in
             DispatchQueue.main.async {
                 cell.recipeImage.image = UIImage(data: data, scale:1)
             }
         }
-
         
-        var h = ""
+        
         if let healthLabels = recipe?.healthLabels{
+            cell.healthLabel.text = "Health: " + healthLabels.joined(separator: " , ")
+        
             
-            for health in healthLabels{
-                if indexPath.row == 0{
-                    cell.healthLabel.text = """
-                    hi man uj
-                mo mo mo
-                mo
-                """
-                }else{
-                    cell.healthLabel.text = h + ",\(health)"
-                    //                print(health, separator: ",", terminator: " ")
-                }
-            }
-            h=""
         }
-        //        cell.healthLabel.numberOfLines = 2
         
-        
-        
-        //        cell.healthLabel.text = """
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        hi
-        //        """
+        cell.didTapBtn = {
+            self.performSegue(withIdentifier: Constant.healthSegue, sender: self.allRecipes[indexPath.row][Constant.recipeDicKey])
+            
+        }
+
         return cell
     }
     
-    
-    //    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-    //        return 250
-    //    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: Constant.detailSegue, sender: allRecipes[indexPath.row][Constant.recipeDicKey])
     }
@@ -300,20 +280,6 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     
-    
-    
-    
-    
-    
-    func getImgData(imgUrl img:String)->Data?{
-        let url = URL(string: img)
-        if let url = url{
-            let data = try? Data(contentsOf: url)
-            return data
-        }
-        return nil
-    }
-    
     //MARK: - prepare for segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("this is sender  --  \(String(describing: sender))")
@@ -321,6 +287,11 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
         // Pass the selected object to the new view controller.
         if segue.identifier == Constant.detailSegue {
             if let nextViewController = segue.destination as? DetailsViewController {
+                nextViewController.recipe = sender as? Recipe
+                
+            }
+        }else if segue.identifier == Constant.healthSegue{
+            if let nextViewController = segue.destination as? HealthLabelViewController {
                 nextViewController.recipe = sender as? Recipe
                 
             }
@@ -357,8 +328,6 @@ extension RecipesSearchViewController:UITextFieldDelegate{
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print(textField.text)
-        
         guard let searchText = textField.text else{
             return false
         }

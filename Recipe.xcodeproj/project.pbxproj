@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0730FC6C1ACC81B7E2E0388D /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E3CC135424914C56C5C8BA3 /* Pods_Recipe_RecipeUITests.framework */; };
 		2E542335C13E3E1FA38FB1E1 /* Pods_RecipeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AF886D2CED00AA2888E615 /* Pods_RecipeTests.framework */; };
+		B923FDDC27C6507D0018C35B /* HealthLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B923FDDB27C6507C0018C35B /* HealthLabelViewController.swift */; };
+		B923FDDE27C6ADB80018C35B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B923FDDD27C6ADB80018C35B /* Extension.swift */; };
 		B9669CAC27C048310073A139 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9669CAB27C048310073A139 /* AppDelegate.swift */; };
 		B9669CAE27C048310073A139 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9669CAD27C048310073A139 /* SceneDelegate.swift */; };
 		B9669CB027C048310073A139 /* RecipesSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9669CAF27C048310073A139 /* RecipesSearchViewController.swift */; };
@@ -53,6 +55,8 @@
 		3E3CC135424914C56C5C8BA3 /* Pods_Recipe_RecipeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recipe_RecipeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AF886D2CED00AA2888E615 /* Pods_RecipeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RecipeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		888318128D518B75EC2E0363 /* Pods-Recipe-RecipeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.debug.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B923FDDB27C6507C0018C35B /* HealthLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLabelViewController.swift; sourceTree = "<group>"; };
+		B923FDDD27C6ADB80018C35B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		B9669CA827C048310073A139 /* Recipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9669CAB27C048310073A139 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9669CAD27C048310073A139 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 		B9669C9F27C048310073A139 = {
 			isa = PBXGroup;
 			children = (
+				B923FDDD27C6ADB80018C35B /* Extension.swift */,
 				B9669CE127C069100073A139 /* Constant.swift */,
 				B9669CAA27C048310073A139 /* Recipe */,
 				B9669CC127C048380073A139 /* RecipeTests */,
@@ -204,6 +209,7 @@
 			children = (
 				B9669CAF27C048310073A139 /* RecipesSearchViewController.swift */,
 				B971E8CB27C2E9BA005DEA6F /* DetailsViewController.swift */,
+				B923FDDB27C6507C0018C35B /* HealthLabelViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -462,10 +468,12 @@
 				B9669CDF27C062C50073A139 /* categoryCollectionViewCell.swift in Sources */,
 				B971E8C427C18047005DEA6F /* RecipeApi.swift in Sources */,
 				B9669CB027C048310073A139 /* RecipesSearchViewController.swift in Sources */,
+				B923FDDE27C6ADB80018C35B /* Extension.swift in Sources */,
 				B971E8C927C2936E005DEA6F /* RecipeTableViewCell.swift in Sources */,
 				B9669CE227C069100073A139 /* Constant.swift in Sources */,
 				B971E8C127C17ED7005DEA6F /* Recipe.swift in Sources */,
 				B971E8C627C1E937005DEA6F /* RecipeModel.swift in Sources */,
+				B923FDDC27C6507D0018C35B /* HealthLabelViewController.swift in Sources */,
 				B9669CAC27C048310073A139 /* AppDelegate.swift in Sources */,
 				B9669CAE27C048310073A139 /* SceneDelegate.swift in Sources */,
 				B971E8CC27C2E9BA005DEA6F /* DetailsViewController.swift in Sources */,

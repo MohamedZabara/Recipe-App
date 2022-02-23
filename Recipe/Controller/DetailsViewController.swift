@@ -46,14 +46,14 @@ class DetailsViewController: UIViewController {
         guard let recipe = recipe else{
             return
         }
-        let someText = "Have a good recipe"
+        let someText = "Have a good day 😃"
         let shareString:String = recipe.shareAs
        let objectsToShare:URL = URL(string:shareString )!
        let sharedObjects:[AnyObject] = [objectsToShare as AnyObject,someText as AnyObject]
        let activityViewController = UIActivityViewController(activityItems : sharedObjects, applicationActivities: nil)
        activityViewController.popoverPresentationController?.sourceView = self.view
 
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail]
+        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop]
 
        self.present(activityViewController, animated: true, completion: nil)
     }
