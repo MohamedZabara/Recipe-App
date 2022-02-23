@@ -15,26 +15,37 @@ class RecipesSearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var allRecipes = [[String:Recipe]]()
     let recipeApi = RecipeApi()
+    let recipeModel = RecipeModel()
     var isMore:Bool?
     var from:Int?
     var search:String?
     var health:String? = nil
 
-    var searchListArray = ["a","b"]
+    var searchListArray = [String](){
+        didSet{
+            recipeTextField.filterStrings(searchListArray.reversed())
+        }
+    }
     
     
+   
     
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        print("here in viewdidload")
         registerCell()
+        setUpSearchList()
+     
+        
+   
+        
+        
+        
 
-        searchListArray.append("we")
-        searchListArray.reverse()
+//        searchListArray.append("we")
+//        searchListArray.reverse()
         print(searchListArray)
         recipeTextField.filterStrings(searchListArray)
 
@@ -44,6 +55,7 @@ class RecipesSearchViewController: UIViewController {
     customizeTextField()
 
         categoryCollectionView.dataSource = self
+        categoryCollectionView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         recipeTextField.delegate = self
@@ -54,12 +66,23 @@ class RecipesSearchViewController: UIViewController {
      
 
     }
+   
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        recipeModel.persistSearchList(list: searchListArray)
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIScene.willDeactivateNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        }
+    }
     
     func registerCell(){
-        let cellNib = UINib(nibName: "\(Constamt.collectionNibName.self)", bundle: nil)
-        categoryCollectionView.register(cellNib.self, forCellWithReuseIdentifier: Constamt.collectionCellIdId)
-        let tableCellNib = UINib(nibName: "\(Constamt.tableNibName.self)", bundle: nil)
-        tableView.register(tableCellNib.self, forCellReuseIdentifier: Constamt.tableCellId)
+        let cellNib = UINib(nibName: "\(Constant.collectionNibName.self)", bundle: nil)
+        categoryCollectionView.register(cellNib.self, forCellWithReuseIdentifier: Constant.collectionCellIdId)
+        let tableCellNib = UINib(nibName: "\(Constant.tableNibName.self)", bundle: nil)
+        tableView.register(tableCellNib.self, forCellReuseIdentifier: Constant.tableCellId)
     }
     
     
@@ -72,7 +95,6 @@ class RecipesSearchViewController: UIViewController {
     
     func createSpinnerFooter()->UIView{
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 100))
-//        footerView.backgroundColor = UIColor.lightGray
         let spinner = UIActivityIndicatorView()
         spinner.center = footerView.center
         footerView.addSubview(spinner)
@@ -90,8 +112,30 @@ class RecipesSearchViewController: UIViewController {
         recipeTextField.startVisible = true
     }
     
+    func setUpSearchList(){
+        recipeModel.getSearchList{
+            self.searchListArray = $0
+        }
+    }
+    
+    func observeAppInBackGround(){
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIScene.willDeactivateNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        }
+    }
+    
+    @objc func willResignActive(_ notification: Notification) {
+        recipeModel.persistSearchList(list: searchListArray)
+    }
+    
+   
+    
     func showErrorHud(){
-        KRProgressHUD.showError(withMessage: "No results found ")
+            self.allRecipes.removeAll()
+            KRProgressHUD.showError(withMessage: "No results found")
+        tableView.tableFooterView = nil
     }
     
     func callSearchApi(search:String? = "random",health:String? = nil,from:Int? = 0,operation:RecipeModel.OperationChosen){
@@ -110,27 +154,39 @@ class RecipesSearchViewController: UIViewController {
 //                    print("cant 2")
                     return
                 }
-                let e:String? = "search"
-                print(e == "search" ? "tttttttt":"ffffffffff")
-                
+            
+
                 switch operation {
                 case .searching:
                     if recipes.isEmpty{
                         self.showErrorHud()
                     }else{
+                        KRProgressHUD.dismiss()
                         self.allRecipes.removeAll()
                     }
+                    
                 
                 case .filtering:
-                    break
+                    if recipes.isEmpty{
+                        self.showErrorHud()
+                    }else{
+                        KRProgressHUD.dismiss()
+                        self.allRecipes.removeAll()
+                    }
+                    
                 case .pagination:
                     break
                 }
                 
+                let o:RecipeModel.OperationChosen = .searching
+                print("kkkkkkkkk\(o)")
             
                 self.allRecipes.append(contentsOf: recipes)
+                print("uuuuuuu\(self.allRecipes.count)")
+
                 self.isMore = hits.more
                 self.from = (hits.to ?? 0) + 1
+                print("pppppp\(hits.to)")
                 print("aaaaaa\(self.search)")
                 self.search = hits.q
                 print("aaaaaa\(search)")
@@ -146,40 +202,62 @@ class RecipesSearchViewController: UIViewController {
         
     }
 }
-
-extension RecipesSearchViewController:UICollectionViewDataSource{
+//MARK: - collectionView
+extension RecipesSearchViewController:UICollectionViewDataSource,UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return Constant.Filteration.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: Constamt.collectionCellIdId, for: indexPath) as! categoryCollectionViewCell
-        cell.categoryName.text = "all"
+        let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: Constant.collectionCellIdId, for: indexPath) as! categoryCollectionViewCell
+        cell.categoryName.sizeToFit()
+        cell.categoryName.text =  Constant.Filteration[indexPath.row].replacingOccurrences(of: "-", with: " ")
+      
         return cell
 
     }
     
+ 
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: Constant.Filteration[indexPath.item].size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]).width + 50, height: 65)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(Constant.Filteration[indexPath.row])
+        if indexPath.row == 0{
+            health = nil
+            print("vvvvvvv search\(search)")
+            callSearchApi(search: search, operation: .searching)
+        }else{
+            health = Constant.Filteration[indexPath.row]
+            print("vvvvvvv search\(search)  filter\(Constant.Filteration[indexPath.row])")
+
+            callSearchApi(search: search, health: health, from: 0, operation: .filtering)
+        }
+        
+    }
+    
     
 }
-
+//MARK: - tableView
 extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allRecipes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constamt.tableCellId, for: indexPath) as! RecipeTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.tableCellId, for: indexPath) as! RecipeTableViewCell
         let recipe = allRecipes[indexPath.row]["recipe"]
 //        print("title :\(recipe?.label)")
         
         cell.titleLabel.text = recipe!.label
 //        print("source :\(recipe?.source)")
         cell.sourceLabel.text = recipe!.source
-        if let img = recipe?.image{
-            if let data = getImgData(imgUrl:img){
-            cell.recipeImage.image = UIImage(data:data)
-            }
-        }
+//        if let img = recipe?.image{
+//            if let data = getImgData(imgUrl:img){
+//            cell.recipeImage.image = UIImage(data:data)
+//            }
+//        }
 //        print("health :\((recipe?.healthLabels))")
 
         var h = ""
@@ -219,11 +297,11 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
-    }
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 250
+//    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: Constamt.detailSegue, sender: allRecipes[indexPath.row][Constamt.recipeDicKey])
+        performSegue(withIdentifier: Constant.detailSegue, sender: allRecipes[indexPath.row][Constant.recipeDicKey])
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -233,7 +311,10 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
             }
             if isMore{
                 tableView.tableFooterView = createSpinnerFooter()
-                callSearchApi(search: search, from: from,operation: .pagination)
+                callSearchApi(search: search,health: health, from: from,operation: .pagination)
+            }else{
+                tableView.tableFooterView = nil
+                print("nnnnnnnnnnnnnnnnnn")
             }
             
         }
@@ -259,7 +340,7 @@ extension RecipesSearchViewController:UITableViewDelegate,UITableViewDataSource{
         print("this is sender  --  \(String(describing: sender))")
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        if segue.identifier == Constamt.detailSegue {
+        if segue.identifier == Constant.detailSegue {
               if let nextViewController = segue.destination as? DetailsViewController {
                   nextViewController.recipe = sender as? Recipe
                       
@@ -304,6 +385,11 @@ extension RecipesSearchViewController:UITextFieldDelegate{
         }
         if !searchText.isEmpty{
             callSearchApi(search: searchText, health: health, from: 0,operation: .searching)
+            searchListArray.append(searchText)
+            if searchListArray.count == 11{
+                searchListArray.removeFirst()
+            }
+            
         }
         textField.resignFirstResponder()
         return true

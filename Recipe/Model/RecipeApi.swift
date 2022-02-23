@@ -5,7 +5,7 @@ import Foundation
 class RecipeApi{
         
     func fetchData(search q:String?,filter health:String?,from:Int?,operation:RecipeModel.OperationChosen,completion:@escaping(Hits?,Bool)->Void){
-        var endPoint = Constamt.startUrlPoint+"&q=\(q ?? "random")&from=\(from!)"
+        var endPoint = Constant.startUrlPoint+"&q=\(q ?? "random")&from=\(from!)"
 
        
         
@@ -38,7 +38,7 @@ class RecipeApi{
           
                 
                 let hitsResult = self.parseJson(data: data)
-                KRProgressHUD.dismiss()
+//                KRProgressHUD.dismiss()
                 if let hitsResult = hitsResult {
                     completion(hitsResult,false)
 
@@ -48,7 +48,7 @@ class RecipeApi{
              
                 
             case .failure(let error):
-                KRProgressHUD.dismiss()
+                KRProgressHUD.showError(withMessage: "No results found")
                 completion(nil,true)
                 print(error)
                 break
@@ -76,5 +76,9 @@ class RecipeApi{
            // completion(nil,true)
 
         }
+    }
+    
+    func loadImageUrl(imgUrl:URL){
+       // let request = AF.request(imgUrl)
     }
 }

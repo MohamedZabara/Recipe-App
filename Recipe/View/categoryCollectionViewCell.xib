@@ -12,24 +12,29 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="category" id="gTV-IL-0wX" customClass="categoryCollectionViewCell" customModule="Recipe" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="207" height="90"/>
+            <rect key="frame" x="0.0" y="0.0" width="207" height="136"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="207" height="90"/>
+                <rect key="frame" x="0.0" y="0.0" width="207" height="136"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1TK-vB-XNQ">
-                        <rect key="frame" x="0.0" y="0.0" width="207" height="90"/>
+                        <rect key="frame" x="0.0" y="0.0" width="207" height="136"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRH-vp-BQk">
-                                <rect key="frame" x="83" y="35" width="41.5" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRH-vp-BQk">
+                                <rect key="frame" x="10" y="35.5" width="187" height="65"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="65" id="2cU-u5-7Pv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
+                                <color key="highlightedColor" systemColor="linkColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="TRH-vp-BQk" secondAttribute="trailing" constant="10" id="2XS-9D-m7V"/>
+                            <constraint firstItem="TRH-vp-BQk" firstAttribute="leading" secondItem="1TK-vB-XNQ" secondAttribute="leading" constant="10" id="Dxq-zi-efo"/>
                             <constraint firstItem="TRH-vp-BQk" firstAttribute="centerY" secondItem="1TK-vB-XNQ" secondAttribute="centerY" id="fdw-2T-sLf"/>
                             <constraint firstItem="TRH-vp-BQk" firstAttribute="centerX" secondItem="1TK-vB-XNQ" secondAttribute="centerX" id="jLa-CY-N0b"/>
                         </constraints>
@@ -43,14 +48,17 @@
                 <constraint firstItem="1TK-vB-XNQ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Rg8-z9-Xc1"/>
                 <constraint firstAttribute="trailing" secondItem="1TK-vB-XNQ" secondAttribute="trailing" id="btk-uH-huS"/>
             </constraints>
-            <size key="customSize" width="207" height="90"/>
+            <size key="customSize" width="207" height="136"/>
             <connections>
                 <outlet property="categoryName" destination="TRH-vp-BQk" id="Yrw-Hn-HaM"/>
             </connections>
-            <point key="canvasLocation" x="251.44927536231887" y="86.383928571428569"/>
+            <point key="canvasLocation" x="251.44927536231887" y="70.982142857142847"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

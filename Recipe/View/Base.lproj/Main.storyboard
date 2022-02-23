@@ -27,7 +27,7 @@
                                             <constraint firstAttribute="height" constant="35" id="JWN-qX-EMi"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="alphabet" returnKeyType="search" textContentType="name"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" returnKeyType="search" textContentType="name"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -121,28 +121,28 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21X-a3-UCH">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJf-Bd-ffa">
                                 <rect key="frame" x="20" y="801" width="374" height="31"/>
-                                <color key="tintColor" systemColor="labelColor"/>
+                                <color key="backgroundColor" systemColor="systemGray4Color"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Recipe Website"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Recipe Website"/>
                                 <connections>
-                                    <action selector="recipeWebsiteBtnClicked:" destination="QYl-U0-oQl" eventType="touchUpInside" id="FAv-xh-1c1"/>
+                                    <action selector="recipeWebsiteBtnClicked:" destination="QYl-U0-oQl" eventType="touchUpInside" id="6ha-jX-4qp"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QWM-gy-DNE"/>
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
-                            <constraint firstItem="QWM-gy-DNE" firstAttribute="bottom" secondItem="21X-a3-UCH" secondAttribute="bottom" constant="30" id="7b4-P0-bta"/>
+                            <constraint firstItem="QWM-gy-DNE" firstAttribute="bottom" secondItem="CJf-Bd-ffa" secondAttribute="bottom" constant="30" id="2tP-Xa-OGK"/>
+                            <constraint firstItem="CJf-Bd-ffa" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" constant="20" id="Enz-07-B5V"/>
+                            <constraint firstItem="QWM-gy-DNE" firstAttribute="trailing" secondItem="CJf-Bd-ffa" secondAttribute="trailing" constant="20" id="FdT-B5-xb0"/>
                             <constraint firstItem="vAz-qB-pUu" firstAttribute="trailing" secondItem="QWM-gy-DNE" secondAttribute="trailing" id="I0y-x0-p6N"/>
-                            <constraint firstItem="QWM-gy-DNE" firstAttribute="trailing" secondItem="21X-a3-UCH" secondAttribute="trailing" constant="20" id="NLl-2E-ODA"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="top" secondItem="QWM-gy-DNE" secondAttribute="top" id="Ngl-gk-IwM"/>
                             <constraint firstItem="vAz-qB-pUu" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" id="Q5o-Zs-5Kp"/>
-                            <constraint firstItem="21X-a3-UCH" firstAttribute="top" secondItem="vAz-qB-pUu" secondAttribute="bottom" constant="12" id="fKZ-kI-CL4"/>
                             <constraint firstItem="vAz-qB-pUu" firstAttribute="top" secondItem="SDl-YH-97K" secondAttribute="bottom" constant="2" id="fZY-vv-a2i"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" id="iK7-RK-mbR"/>
-                            <constraint firstItem="21X-a3-UCH" firstAttribute="leading" secondItem="QWM-gy-DNE" secondAttribute="leading" constant="20" id="oId-or-TiE"/>
+                            <constraint firstItem="CJf-Bd-ffa" firstAttribute="top" secondItem="vAz-qB-pUu" secondAttribute="bottom" constant="12" id="mSJ-7F-BmG"/>
                             <constraint firstItem="SDl-YH-97K" firstAttribute="trailing" secondItem="QWM-gy-DNE" secondAttribute="trailing" id="x8p-P6-eIT"/>
                         </constraints>
                     </view>
@@ -198,6 +198,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
