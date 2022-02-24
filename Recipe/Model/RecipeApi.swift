@@ -11,6 +11,9 @@ class RecipeApi{
         
         switch operation {
         case .searching:
+            if let health = health{
+                endPoint = endPoint + "&health=\(health)"
+            }
             KRProgressHUD.show(withMessage: "Loading...")
             break
         case .filtering:

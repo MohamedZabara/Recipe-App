@@ -334,6 +334,7 @@ extension RecipesSearchViewController:UITextFieldDelegate{
         if !searchText.isEmpty{
             callSearchApi(search: searchText, health: health, from: 0,operation: .searching)
             searchListArray.append(searchText)
+            textField.text = ""
             if searchListArray.count == 11{
                 searchListArray.removeFirst()
             }
